@@ -1,13 +1,11 @@
 const express = require('express');
-const {signup, signin} = require("../controllers/userControllers")
+const {sendOtp, signUp, signIn} = require("../controllers/userControllers")
 
 const router = express.Router();
 
-router.post('/register', signup);
-router.post('/login', signin)
-// router.get("/current", validateToken)
-// router.post('/forgotpassword', forgotPassword)
+router.post('/sendotp', sendOtp);
+router.post('/signup', signUp)
+router.post('/login', signIn)
 
-// router.get('/', userControllers.getAll)
 
 module.exports = router;
