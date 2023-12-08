@@ -16,7 +16,6 @@ const generateVerificationCode = async (req, res, next) => {
     await sendVerificationEmail(email, verificationCode);
 
     // Store verification code in the request object for later use
-    req.userOtp = verificationCode;
 
     // Continue to the next middleware or route handler
     next();
