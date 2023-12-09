@@ -237,5 +237,15 @@ const forgotPassword = async (req, res) => {
 
 }
 
+const getAllUser = async (req, res) => {
+  try {
+    const user = await User.find();
+    res.status(200).json({ status: "success", user: user }); 
+} catch (error) {
+    console.error( error);
+    res.status(500).json({ message: 'Something went wrong' });  
+}
+}
 
-module.exports = { sendOtp, signUp, signIn, forgotPassword };
+
+module.exports = { sendOtp, signUp, signIn, forgotPassword, getAllUser };
