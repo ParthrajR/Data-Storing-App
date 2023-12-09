@@ -153,7 +153,7 @@ const signIn = async (req, res) => {
       )
       res.status(200).json({status: "success", token: token})
     }
-    else{
+    else if(type = "mannual"){
       if(!email){
         return res.status(400).json({ message: 'All fields are mandatory.' });
       }
