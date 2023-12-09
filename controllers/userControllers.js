@@ -136,14 +136,25 @@ const signIn = async (req, res) => {
     const user = await User.findOne({email})
 
     if(type == "google"){
-      const userRecord = new User({
-        username: username,
-        email: email,
-        type:type
-      });
+      if(!user){
+        const userRecord = new User({
+          username: username,
+          email: email,
+          type:type
+        });
+  
+        await userRecord.save();
 
-      await userRecord.save();
-
+        const token = jwt.sign({
+          user:{
+            email: req.body.email,
+          },
+        }, process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: "1h"}
+        )
+        res.status(200).json({status: "success", token: token})
+      }
+      else{
       const token = jwt.sign({
         user:{
           email: user.email,
@@ -153,7 +164,8 @@ const signIn = async (req, res) => {
       )
       res.status(200).json({status: "success", token: token})
     }
-    else if(type = "mannual"){
+    }
+    else if(type == "mannual"){
       if(!email){
         return res.status(400).json({ message: 'All fields are mandatory.' });
       }
