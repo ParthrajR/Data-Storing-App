@@ -132,26 +132,47 @@ const signUp = async (req, res) => {
 const signIn = async (req, res) => {
   try {
     const { email, password } = req.body;
-    if(!email || !password){
-      return res.status(400).json({ message: 'All fields are mandatory.' });
+
+    const user = await User.findOne({email})
+
+    if(!user){
+      const userRecord = new User({
+        email: email,
+      });
+
+      await userRecord.save();
+
+      const token = jwt.sign({
+        user:{
+          email: user.email,
+        },
+      }, process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "1h"}
+      )
+      res.status(200).json({status: "success", token: token})
     }
     else{
-      const user = await User.findOne({email})
-      if(user && (await bcrypt.compare(password, user.password))){
-
-        const token = jwt.sign({
-          user:{
-            username: user.username,
-            email: user.email,
-            id: user._id 
-          },
-        }, process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: "1h"}
-        )
-        res.status(200).json({status: "success", token: token})
+      if(!email){
+        return res.status(400).json({ message: 'All fields are mandatory.' });
       }
       else{
-        res.status(400).json({message: "User not found"})
+        const user = await User.findOne({email})
+        if(user && (await bcrypt.compare(password, user.password))){
+
+          const token = jwt.sign({
+            user:{
+              username: user.username,
+              email: user.email,
+              id: user._id 
+            },
+          }, process.env.ACCESS_TOKEN_SECRET,
+          { expiresIn: "1h"}
+          )
+          res.status(200).json({status: "success", token: token})
+        }
+        else{
+          res.status(400).json({message: "User not found"})
+        }
       }
     }
    
