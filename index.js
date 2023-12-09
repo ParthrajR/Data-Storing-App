@@ -15,7 +15,7 @@ app.use('/api/file', fileRoutes);
 const url = process.env.MONGO_URL;
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
-    console.log('Connected to the database');
+    console.log('helllllllllllll  Connected to the database');
   })
   .catch((err) => {
     console.error('Error connecting to the database:', err.message);
