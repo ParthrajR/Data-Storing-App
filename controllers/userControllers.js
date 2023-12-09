@@ -131,13 +131,15 @@ const signUp = async (req, res) => {
 
 const signIn = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const {username, email, password, type } = req.body;
 
     const user = await User.findOne({email})
 
-    if(!user){
+    if(type == "google"){
       const userRecord = new User({
+        username: username,
         email: email,
+        type:type
       });
 
       await userRecord.save();
