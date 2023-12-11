@@ -92,10 +92,15 @@ const signUp = async (req, res) => {
   try {
     const { name, email, verificationCode, password, confirm } = req.body;
     const existingOtp = await Otp.findOne({ email: email });
+    const existingUser = await User.findOne({email: email}) 
 
     if (!name || !email || !verificationCode || !password || !confirm) {
       return res.status(400).json({ message: 'All fields are mandatory.' });
     } else {
+      if(existingUser){
+        return res.status(400).json({ message: 'user already exist' });
+      }
+      else{
       if (!existingOtp) {
         return res.status(400).json({ message: 'First get verification code' });
       } else {
@@ -120,6 +125,7 @@ const signUp = async (req, res) => {
             res.status(201).json({ message: 'User signed up successfully' });
           }
         }
+      }
       }
     }
   } catch (error) {
