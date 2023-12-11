@@ -12,7 +12,6 @@ app.use(express.json());
 
 app.use('/api/user', userRoutes);
 app.use('/api/admin', adminRoutes);
-
 app.use('/api/file', fileRoutes);
 
 // Connect to MongoDB using mongoose

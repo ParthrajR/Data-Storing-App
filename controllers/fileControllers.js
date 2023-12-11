@@ -28,6 +28,7 @@ const uploadFile = async (req, res) => {
 const getAllFile = async (req, res) => {
   try {
     const userId = req.userId
+    console.log(userId)
     const existingUser = await Media.find({userId: userId})
     res.status(200).send({files: existingUser});
 

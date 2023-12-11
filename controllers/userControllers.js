@@ -178,7 +178,7 @@ const signIn = async (req, res) => {
       else{
         const user = await User.findOne({email})
         if(user && (await bcrypt.compare(password, user.password))){
-
+          console.log("user verified")
           const token = jwt.sign({
             user:{
               username: user.username,
