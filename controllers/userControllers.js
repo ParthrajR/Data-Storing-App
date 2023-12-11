@@ -14,13 +14,13 @@ const sendOtp = async (req, res) => {
   if (type === "signup") {
     console.log("signnnnnupppp")
     try {
-      const existingUser = await User.findOne({ email: email });
+      const existingUser = await Otp.findOne({ email: email });
 
       if (!email) {
         return res.status(400).json({ message: "All fields are mandatory" });
       }
       if (existingUser) {
-        return res.status(400).json({ message: "User already exists" });
+        return res.status(400).json({ message: "Verification code already send to the email" });
       }
 
       // Generate OTP

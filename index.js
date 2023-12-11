@@ -3,12 +3,16 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const app = express();
 const userRoutes = require('./routes/userRoutes');
+const adminRoutes = require('./routes/adminRoutes')
+
 const fileRoutes = require('./routes/fileRoutes');
 const port = process.env.PORT || 1210;
 
 app.use(express.json());
 
 app.use('/api/user', userRoutes);
+app.use('/api/admin', adminRoutes);
+
 app.use('/api/file', fileRoutes);
 
 // Connect to MongoDB using mongoose
