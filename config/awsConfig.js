@@ -4,7 +4,7 @@ const uuid = require("uuid").v4;
 
 AWS.config.update({
   accessKeyId: process.env.ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  secretAccessKey: process.env.SECRET_ACCESS_KEY,
   region: process.env.AWS_REGION,
 })
 
