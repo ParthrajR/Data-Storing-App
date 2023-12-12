@@ -120,9 +120,18 @@ const signUp = async (req, res) => {
               password: hashedPassword,
             });
 
+            const token = jwt.sign({
+              user:{
+                username: name,
+                email: email,
+              },
+            }, process.env.ACCESS_TOKEN_SECRET,
+            { expiresIn: "1h"}
+            )
+
             await userRecord.save();
             await Otp.findOneAndDelete({ email: email, type: 'signup' });
-            res.status(201).json({ message: 'User signed up successfully' });
+            res.status(200).json({ message: 'User signed up successfully', token: token });
           }
         }
       }
