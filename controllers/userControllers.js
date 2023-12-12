@@ -47,44 +47,53 @@ const sendOtp = async (req, res) => {
       res.status(500).json({ message: 'Failed to send OTP' });
     }
   } else if (type === "forgot") {
-
-    console.log("forgot")
-
+    console.log("forgot");
+  
     try {
+      const existingOtp = await Otp.findOne({ email: email });
       const existingUser = await User.findOne({ email: email });
-
+  
       if (!email) {
         return res.status(400).json({ message: "All fields are mandatory" });
       } else {
-        if (!existingUser) {
-          return res.status(400).json({ message: "User not found" });
+        if (existingOtp) {
+          return res.status(400).json({
+            message: "Verification code already sent to the email",
+          });
         } else {
-          // Generate OTP
-          const verificationCode = randomstring.generate({
-            length: 6,
-            charset: 'numeric',
-          });
-
-          // Send OTP to the user's email
-          await sendVerificationEmail(email, verificationCode);
-
-          // Save email and verification code in the database
-          const verificationRecord = new Otp({
-            email: email,
-            code: verificationCode,
-            type: type, // Fix the typo here
-          });
-
-          await verificationRecord.save();
-
-          res.status(200).json({ status: "success", message: "Email sent successfully" });
+          if (!existingUser) {
+            return res.status(400).json({ message: "User not found" });
+          } else {
+            // Generate OTP
+            const verificationCode = randomstring.generate({
+              length: 6,
+              charset: "numeric",
+            });
+  
+            // Send OTP to the user's email
+            await sendVerificationEmail(email, verificationCode);
+  
+            // Save email and verification code in the database
+            const verificationRecord = new Otp({
+              email: email,
+              code: verificationCode,
+              type: type,
+            });
+  
+            await verificationRecord.save();
+  
+            res
+              .status(200)
+              .json({ status: "success", message: "Email sent successfully" });
+          }
         }
       }
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Something went wrong' });
+      res.status(500).json({ message: "Something went wrong" });
     }
   }
+  
 };
 
 
@@ -224,6 +233,10 @@ const forgotPassword = async (req, res) => {
         return res.status(400).json({ message: 'First get verification code' });
       }
       else{
+        if(existingOtp){
+          return res.status(400).json({ message: 'First get verification code' });
+
+        }
         if (verificationCode !== existingOtp.code) {
           return res.status(400).json({ message: 'Invalid verification code' });
         }
