@@ -233,10 +233,6 @@ const forgotPassword = async (req, res) => {
         return res.status(400).json({ message: 'First get verification code' });
       }
       else{
-        if(existingOtp){
-          return res.status(400).json({ message: 'First get verification code' });
-
-        }
         if (verificationCode !== existingOtp.code) {
           return res.status(400).json({ message: 'Invalid verification code' });
         }
