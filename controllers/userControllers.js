@@ -7,7 +7,6 @@ const { sendVerificationEmail } = require('../utils/sendMail');
 const Otp = require('../models/otpModel');
 
 
-
 const sendOtp = async (req, res) => {
   const { email, type } = req.body;
 
@@ -128,17 +127,18 @@ const signUp = async (req, res) => {
               email: email,
               password: hashedPassword,
             });
-
+            await userRecord.save();
+            console.log("cscscscscsc", userRecord._id)
             const token = jwt.sign({
               user:{
                 username: name,
                 email: email,
+                id: userRecord._id
               },
             }, process.env.ACCESS_TOKEN_SECRET,
             { expiresIn: "1h"}
             )
 
-            await userRecord.save();
             await Otp.findOneAndDelete({ email: email, type: 'signup' });
             res.status(200).json({ message: 'User signed up successfully', token: token });
           }

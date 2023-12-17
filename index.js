@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const app = express();
 const userRoutes = require('./routes/userRoutes');
 const adminRoutes = require('./routes/adminRoutes')
-
+const freeSpaceRouter = require('./routes/freeSpaceRoutes');
 const fileRoutes = require('./routes/fileRoutes');
 const port = process.env.PORT || 1210;
 
@@ -13,6 +13,7 @@ app.use(express.json());
 app.use('/api/user', userRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/file', fileRoutes);
+app.use('/api', freeSpaceRouter);
 
 // Connect to MongoDB using mongoose
 const url = process.env.MONGO_URL;
