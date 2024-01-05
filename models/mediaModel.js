@@ -11,6 +11,14 @@ const fileSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId, // Change the type to ObjectId
     ref: "User", // Reference to the 'User' model
     required: true,
+  },
+  fileSize: {
+    type: String, // Adjust the type based on your needs (e.g., 'image/jpeg', 'application/pdf', etc.)
+    required: true,
+  },
+  fileType:{
+    type: String,
+    required: true,
   }
 },
   {timestamps: true}
