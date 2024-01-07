@@ -203,8 +203,7 @@ const signIn = async (req, res) => {
               email: user.email,
               id: user._id 
             },
-          }, process.env.ACCESS_TOKEN_SECRET,
-          { expiresIn: "1h"}
+          }, process.env.ACCESS_TOKEN_SECRET
           )
           res.status(200).json({status: "success", token: token})
         }

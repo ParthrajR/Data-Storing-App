@@ -27,14 +27,39 @@ const uploadFile = async (req, res) => {
       // Format file size
       const formattedFileSize = formatFileSize(fileSizeInBytes);
 
-      const media = await Media.create({
-        fileUrl: fileresult.Location,
-        userId: req.userId,
-        fileSize: formattedFileSize,
-        fileType: detectedFileType
-      });
+      
+      if(detectedFileType === "png" || detectedFileType === "jpeg" || detectedFileType === "jpg" || detectedFileType === "gif" || detectedFileType === "bmp" || detectedFileType === "tiff" || detectedFileType === "webp"){
+        const media = await Media.create({
+          fileUrl: fileresult.Location,
+          userId: req.userId,
+          fileSize: formattedFileSize,
+          fileType: "Image"
+        });
+  
+        mediaArray.push(media);
+      }
+      else if(detectedFileType === "mp4" || detectedFileType === "mpeg" || detectedFileType === "webm" || detectedFileType === "ogg" || detectedFileType === "quicktime" || detectedFileType === "x-msvideo"){
+        const media = await Media.create({
+          fileUrl: fileresult.Location,
+          userId: req.userId,
+          fileSize: formattedFileSize,
+          fileType: "Video"
+        });
+  
+        mediaArray.push(media);
+      }
+      else{
+        const media = await Media.create({
+          fileUrl: fileresult.Location,
+          userId: req.userId,
+          fileSize: formattedFileSize,
+          fileType: "Document"
+        });
+  
+        mediaArray.push(media);
+      }
 
-      mediaArray.push(media);
+      
     });
     
     await Promise.all(uploadPromises);
